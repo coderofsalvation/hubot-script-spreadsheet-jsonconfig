@@ -122,7 +122,7 @@ module.exports = function(robot) {
            }
            if(!empty) t.newRow();
          }
-         var str = warning + t.toString()+"\nedit values @ "+process.env.GOOGLE_SPREADSHEET_CONFIG_URL;
+         var str = (warning != undefined ? warning : "") + t.toString()+"\nedit values @ "+process.env.GOOGLE_SPREADSHEET_CONFIG_URL;
          if( process.env.GOOGLE_SPREADSHEET_CONFIG_URLJSON ) str += "\njson url: "+process.env.GOOGLE_SPREADSHEET_CONFIG_URLJSON;
          return msg.send( str );
        });
