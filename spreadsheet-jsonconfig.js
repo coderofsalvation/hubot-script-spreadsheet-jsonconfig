@@ -113,9 +113,11 @@ module.exports = function(robot) {
          var start = 2;
          var end   = search ? nrows-1 : start+MAXROWS;
          for( i = start; i < nrows; i++ ){
-           t.cell( columns[1], rows[i][1] != undefined ? rows[i][1] : "" );
-           t.cell( columns[2], rows[i][2] != undefined ? rows[i][2] : "" );
-           t.newRow();
+           if( rows[i][1] != undefined && rows[i][1].length ){
+             t.cell( columns[1], rows[i][1] != undefined ? rows[i][1] : "" );
+             t.cell( columns[2], rows[i][2] != undefined ? rows[i][2] : "" );
+             t.newRow();
+           }
          }
          //for( i = start; i < end; i++ ){
          //  var empty=true;
