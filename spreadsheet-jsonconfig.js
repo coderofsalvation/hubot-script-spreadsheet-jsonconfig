@@ -74,7 +74,7 @@ module.exports = function(robot) {
     var start = 2;
     for( i = 2; i < nrows; i++ ){
       var value = rows[i][2];
-      if( value[0] == "{" || value[0] == "[" ){
+      if( value != undefined && value.length && (value[0] == "{" || value[0] == "[") ){
         try{ 
           value = JSON.parse(value);
         }catch(e){ return "*** WARNING ***: there's corrupt json in the spreadsheet\n\n"; }
@@ -112,27 +112,26 @@ module.exports = function(robot) {
          var columns = rows[1];
          var start = 2;
          var end   = search ? nrows-1 : start+MAXROWS;
-         for( i = start; i < end; i++ ){
-           var empty=true;
-           for( column in columns ){
-             if( rows[i] != undefined && ( !search || rowContains(rows[i],search) ) ){
-               t.cell( columns[column], rows[i][column] != undefined ? rows[i][column] : "" );
-               empty = false;
-             }
-           }
-           if(!empty) t.newRow();
+         for( i = start; i < nrows; i++ ){
+           t.cell( columns[1], rows[i][1] != undefined ? rows[i][1] : "" );
+           t.cell( columns[2], rows[i][2] != undefined ? rows[i][2] : "" );
+           t.newRow();
          }
+         //for( i = start; i < end; i++ ){
+         //  var empty=true;
+         //  for( column in columns ){
+         //    if( rows[i] != undefined && ( !search || rowContains(rows[i],search) ) ){
+         //      t.cell( columns[column], rows[i][column] != undefined ? rows[i][column] : "" );
+         //      empty = false;
+         //    }
+         //  }
+         //  if(!empty) t.newRow();
+         //}
          var str = (warning != undefined ? warning : "") + t.toString()+"\nedit values @ "+process.env.GOOGLE_SPREADSHEET_CONFIG_URL;
          if( process.env.GOOGLE_SPREADSHEET_CONFIG_URLJSON ) str += "\njson url: "+process.env.GOOGLE_SPREADSHEET_CONFIG_URLJSON;
          return msg.send( str );
        });
      });
   });
-
-  function rowContains( row, searchstr ){
-    for( col in row )
-      if( String(row[col]).match( new RegExp(searchstr,"gi") ) ) return true; 
-    return false;
-  }
 
 };
